@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090806">
+  <title>触覚の美術館 | Traces of Touch</title>
+  <meta name="description" content="皮膚、物質、手、記憶をめぐるインタラクティブ・オンライン展覧会">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0907'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%23a34d32'/%3E%3Ccircle cx='32' cy='32' r='3' fill='%23eee9df'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Noto+Serif+JP:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="trace-canvas" aria-hidden="true"></canvas>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span></span></div>
+
+  <div class="entrance" id="entrance">
+    <div class="entrance-art" aria-hidden="true">
+      <div class="entrance-orbit orbit-a"></div>
+      <div class="entrance-orbit orbit-b"></div>
+      <div class="entrance-hand"></div>
+    </div>
+    <p class="eyebrow">ONLINE EXHIBITION · 2026</p>
+    <h1><span>TRACES</span><span>OF TOUCH</span></h1>
+    <p class="entrance-jp">触覚の美術館</p>
+    <p class="entrance-copy">見ることは、触れることに<br>どこまで近づけるだろう。</p>
+    <button class="enter-button" id="enter-button">
+      <span>展示室へ入る</span><i></i>
+    </button>
+    <p class="entrance-note">音声はありません · 指先を動かしてお入りください</p>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="展覧会の入口へ">
+      <span>TRACES<br>OF TOUCH</span>
+      <small>触覚の美術館</small>
+    </a>
+    <nav class="rooms-nav" aria-label="展示室">
+      <a href="#skin" data-room="01">皮膚</a>
+      <a href="#matter" data-room="02">物質</a>
+      <a href="#hands" data-room="03">手</a>
+      <a href="#memory" data-room="04">記憶</a>
+    </nav>
+    <button class="index-button" id="index-button"><i></i><span>作家索引</span></button>
+  </header>
+
+  <div class="progress-rail" aria-hidden="true"><span id="progress"></span></div>
+  <aside class="room-counter" aria-hidden="true"><b id="room-number">00</b><span id="room-name">PROLOGUE</span></aside>
+
+  <main id="top">
+    <section class="hero" data-room-name="PROLOGUE" data-room-number="00">
+      <div class="hero-image image-reveal">
+        <img src="assets/michelangelo.jpg" alt="ミケランジェロ《アダムの創造》の手の部分">
+      </div>
+      <div class="hero-title">
+        <p class="eyebrow">A HAPTIC ART ATLAS</p>
+        <h2>目で、<br><em>触れる。</em></h2>
+      </div>
+      <p class="hero-intro">
+        絵具の厚み、乾いた線、冷たい石、触れ合う直前の指先。<br>
+        22人の作家を通して、視覚の奥に眠る触覚をひらく。
+      </p>
+      <div class="scroll-cue"><span></span><small>SCROLL TO ENTER</small></div>
+    </section>
+
+    <section class="manifesto">
+      <p class="manifesto-number">INTRODUCTION</p>
+      <blockquote>
+        <span>作品を見るとき、</span>
+        <span>私たちの皮膚もまた、</span>
+        <span>静かに見ている。</span>
+      </blockquote>
+      <p>画面の上で指を動かすと、痕跡が残ります。それは消えながら、次の作品へとあなたを導きます。</p>
+    </section>
+
+    <div id="exhibition"></div>
+
+    <section class="epilogue" data-room-name="EPILOGUE" data-room-number="05">
+      <div class="epilogue-image image-reveal"><img src="assets/durer.jpg" alt="デューラー《祈る手》"></div>
+      <p class="eyebrow">EPILOGUE</p>
+      <h2>最後に残るのは、<br>作品ではなく、<em>感覚</em>かもしれない。</h2>
+      <button class="restart-button" id="restart-button"><span>もう一度、入口から見る</span><i></i></button>
+      <p class="credits">CURATED FROM “触覚と手の美術図鑑” · PERSONAL DIGITAL EXHIBITION</p>
+    </section>
+  </main>
+
+  <section class="artist-index" id="artist-index" aria-hidden="true">
+    <button class="close-index" id="close-index" aria-label="索引を閉じる">CLOSE <i></i></button>
+    <div class="index-heading">
+      <p class="eyebrow">ALL ARTISTS · 22</p>
+      <h2>作家索引</h2>
+    </div>
+    <div class="index-list" id="index-list"></div>
+  </section>
+
+  <dialog class="art-dialog" id="art-dialog">
+    <button class="dialog-close" id="dialog-close" aria-label="閉じる"><span></span><span></span></button>
+    <button class="dialog-arrow previous" id="previous-art" aria-label="前の作品">←</button>
+    <button class="dialog-arrow next" id="next-art" aria-label="次の作品">→</button>
+    <div class="dialog-visual">
+      <img id="dialog-image" alt="">
+      <div class="dialog-image-number" id="dialog-image-number"></div>
+    </div>
+    <article class="dialog-copy">
+      <p class="dialog-room" id="dialog-room"></p>
+      <h2 id="dialog-artist"></h2>
+      <p class="dialog-life" id="dialog-life"></p>
+      <h3 id="dialog-work"></h3>
+      <p class="dialog-description" id="dialog-description"></p>
+      <div class="dialog-focus">
+        <span>TOUCH FOCUS</span>
+        <p id="dialog-focus"></p>
+      </div>
+      <p class="dialog-instruction">← → キーで次の作品へ · ESCで閉じる</p>
+    </article>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
