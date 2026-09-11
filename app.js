@@ -316,13 +316,62 @@ const roomObserver = new IntersectionObserver(entries => {
 roomSections.forEach(section => roomObserver.observe(section));
 
 const cursor = document.querySelector(".cursor");
+const cursorDot = document.querySelector(".cursor-dot");
 let mouseX = innerWidth / 2, mouseY = innerHeight / 2, cursorX = mouseX, cursorY = mouseY;
-addEventListener("pointermove", e => { mouseX = e.clientX; mouseY = e.clientY; });
-document.addEventListener("pointerover", e => cursor.classList.toggle("active", !!e.target.closest("button,a")));
+let isCursorVisible = false;
+let isClicking = false;
+
+function updateDotTransform() {
+  if (cursorDot) {
+    const dotScale = isClicking ? " scale(1.3)" : "";
+    cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)${dotScale}`;
+  }
+}
+
+addEventListener("pointermove", e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  if (!isCursorVisible) {
+    isCursorVisible = true;
+    cursor.style.opacity = "1";
+    if (cursorDot) cursorDot.style.opacity = "1";
+    cursorX = mouseX;
+    cursorY = mouseY;
+  }
+  updateDotTransform();
+});
+
+document.addEventListener("pointerdown", () => {
+  isClicking = true;
+  cursor.classList.add("clicking");
+  if (cursorDot) cursorDot.classList.add("clicking");
+  updateDotTransform();
+});
+
+document.addEventListener("pointerup", () => {
+  isClicking = false;
+  cursor.classList.remove("clicking");
+  if (cursorDot) cursorDot.classList.remove("clicking");
+  updateDotTransform();
+});
+
+document.addEventListener("pointerover", e => {
+  const isInteractive = !!e.target.closest("button, a, input, dialog, .art-card, .index-item");
+  cursor.classList.toggle("active", isInteractive);
+  if (cursorDot) cursorDot.classList.toggle("active", isInteractive);
+});
+
+document.addEventListener("pointerleave", () => {
+  cursor.style.opacity = "0";
+  if (cursorDot) cursorDot.style.opacity = "0";
+  isCursorVisible = false;
+});
+
 function animateCursor() {
-  cursorX += (mouseX - cursorX) * .18;
-  cursorY += (mouseY - cursorY) * .18;
-  cursor.style.transform = `translate(${cursorX - 21}px,${cursorY - 21}px)`;
+  cursorX += (mouseX - cursorX) * .22;
+  cursorY += (mouseY - cursorY) * .22;
+  const scale = isClicking ? " scale(0.86)" : "";
+  cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)${scale}`;
   requestAnimationFrame(animateCursor);
 }
 animateCursor();
