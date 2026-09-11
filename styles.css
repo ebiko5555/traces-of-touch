@@ -173,7 +173,7 @@ main { position: relative; z-index: 2; }
 .index-item small { justify-self: end; font: 6px var(--mono); letter-spacing: .14em; }
 .index-item:hover { padding-left: 20px; background: rgba(255,255,255,.13); }
 
-.art-dialog { inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; padding: 0; border: 0; color: var(--bone); background: #0a0907; overflow: hidden; }
+.art-dialog { position: fixed; inset: 0; z-index: 80; width: 100%; height: 100%; max-width: none; max-height: none; padding: 0; border: 0; color: var(--bone); background: #0a0907; overflow: hidden; cursor: none; }
 .art-dialog::backdrop { background: #0a0907; }
 .art-dialog[open] { display: grid; grid-template-columns: 58% 42%; animation: dialog-in .65s ease both; }
 @keyframes dialog-in { from { opacity: 0; transform: scale(.98); } }

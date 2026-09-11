@@ -265,11 +265,20 @@ function openArtist(index) {
   document.querySelector("#dialog-source").href = notes.source[1];
   document.querySelector("#dialog-source-label").textContent = notes.source[0];
   document.querySelector(".dialog-copy").scrollTop = 0;
-  if (!dialog.open) dialog.showModal();
+  if (!dialog.open) {
+    if (typeof dialog.show === "function") {
+      dialog.show();
+    } else {
+      dialog.setAttribute("open", "");
+    }
+  }
   document.body.classList.add("locked");
 }
 function closeDialog() {
-  dialog.close();
+  if (typeof dialog.close === "function") {
+    dialog.close();
+  }
+  dialog.removeAttribute("open");
   document.body.classList.remove("locked");
 }
 document.addEventListener("click", e => {
@@ -356,7 +365,7 @@ document.addEventListener("pointerup", () => {
 });
 
 document.addEventListener("pointerover", e => {
-  const isInteractive = !!e.target.closest("button, a, input, dialog, .art-card, .index-item");
+  const isInteractive = !!e.target.closest("button, a, input, .art-card, .index-item, [role='button']");
   cursor.classList.toggle("active", isInteractive);
   if (cursorDot) cursorDot.classList.toggle("active", isInteractive);
 });
